@@ -1,0 +1,4 @@
+# Ignore build directory
+build/*
+# But don't ignore main .csv data file
+!build/out.csv

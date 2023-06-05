@@ -1,0 +1,2 @@
+# All *.sh build scripts should have lf endings
+*.sh text eol=lf
