@@ -2,8 +2,8 @@
 
 set -xeu
 
-CC="clang++"
-CFLAGS="-Wall -Wextra -Wpedantic -std=c++20 -O3"
+CC="c++"
+CFLAGS="-Wall -Wextra -Wpedantic -std=c++2b -O3"
 SRC_DIR="src/pathfinder"
 SOURCES="${SRC_DIR}/main.cpp"
 OUTPUT="pathfinder"
