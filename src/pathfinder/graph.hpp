@@ -10,23 +10,22 @@
 #include <unordered_set>
 
 namespace Graphs {
-    using Vertex = int;
-    using DistType = int;
+using Vertex = int;
+using DistType = int;
 
-    using StdRepresentation = std::unordered_map<Vertex, std::unordered_map<Vertex, DistType>>;
+using StdRepresentation = std::unordered_map<Vertex, std::unordered_map<Vertex, DistType>>;
 
-    using VertexIterator = StdRepresentation::iterator;
-    using VertexConstIterator = StdRepresentation::const_iterator;
+using VertexIterator = StdRepresentation::iterator;
+using VertexConstIterator = StdRepresentation::const_iterator;
 
-    using VertexAdjacentIterator = StdRepresentation::mapped_type::iterator;
-    using VertexAdjacentConstIterator = StdRepresentation::mapped_type::const_iterator;
+using VertexAdjacentIterator = StdRepresentation::mapped_type::iterator;
+using VertexAdjacentConstIterator = StdRepresentation::mapped_type::const_iterator;
 
-    static DistType constexpr kMinRandomWeight = 1;
-    static DistType constexpr kMaxRandomWeight = 10;
-    static DistType constexpr kDistError = -1;
+static DistType constexpr kMinRandomWeight = 1;
+static DistType constexpr kMaxRandomWeight = 10;
+static DistType constexpr kDistError = -1;
 };
 
-template <class GraphGenerator>
 class Graph {
 public:
     Graph(Graphs::StdRepresentation const& graph)
@@ -77,17 +76,14 @@ public:
 
     Graphs::VertexAdjacentConstIterator adjacent_begin(Graphs::Vertex v) const
     {
-        return adjacent_begin(v);
+        auto it = _graph.find(v);
+        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.begin();
     }
 
     Graphs::VertexAdjacentConstIterator adjacent_end(Graphs::Vertex v) const
     {
-        return adjacent_end(v);
-    }
-
-    static Graph<GraphGenerator> generate(size_t vertex_count)
-    {
-        return GraphGenerator::generate(vertex_count);
+        auto it = _graph.find(v);
+        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.end();
     }
 
 private:
@@ -95,7 +91,16 @@ private:
     size_t _vertex_count {};
 };
 
-class FullGraph : Graph<FullGraph> {
+template <class Generator>
+class GraphGenerator {
+public:
+    static Graph generate(size_t vertex_count)
+    {
+        return Generator::graph(vertex_count);
+    }
+};
+
+class FullGraphGenerator : GraphGenerator<FullGraphGenerator> {
 public:
     static void fill(Graphs::StdRepresentation& graph, size_t vertex_count)
     {
@@ -113,7 +118,7 @@ public:
         }
     }
 
-    static Graph<FullGraph> generate(size_t vertex_count)
+    static Graph generate(size_t vertex_count)
     {
         Graphs::StdRepresentation graph;
         fill(graph, vertex_count);
@@ -121,12 +126,12 @@ public:
     }
 };
 
-class PartialGraph : Graph<PartialGraph> {
+class PartialGraphGenerator : GraphGenerator<PartialGraphGenerator> {
 public:
     static constexpr double kMinDensity = 0.4;
     static constexpr double kMaxDensity = 0.5;
 
-    static Graph<PartialGraph> generate(size_t vertex_count)
+    static Graph generate(size_t vertex_count)
     {
         auto const density = util::getRandomNumber(kMinDensity, kMaxDensity);
         auto const edge_count = static_cast<size_t>(0.5 * density * vertex_count * (vertex_count - 1));
@@ -198,9 +203,9 @@ private:
     }
 };
 
-class TreeGraph : Graph<TreeGraph> {
+class TreeGraphGenerator : GraphGenerator<TreeGraphGenerator> {
 public:
-    static Graph<TreeGraph> generate(size_t vertex_count)
+    static Graph generate(size_t vertex_count)
     {
         // Using Prüfer sequence to generate trees.
         std::vector<Graphs::Vertex> S = generatePrefill(vertex_count);
@@ -221,10 +226,10 @@ public:
             S.pop_back();
             L.erase(v);
 
-            PartialGraph::addEdgeWithRandomWeight(graph, u - 1, v - 1);
+            PartialGraphGenerator::addEdgeWithRandomWeight(graph, u - 1, v - 1);
         }
 
-        PartialGraph::addEdgeWithRandomWeight(graph, *L.begin() - 1, *std::next(L.begin()) - 1);
+        PartialGraphGenerator::addEdgeWithRandomWeight(graph, *L.begin() - 1, *std::next(L.begin()) - 1);
         return { graph };
     }
 

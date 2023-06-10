@@ -2,7 +2,8 @@
 #include <iostream>
 #include <vector>
 
-using Vertex = int;
+using namespace Graphs;
+
 std::vector<Vertex> generatePrefill(size_t vertex_count)
 {
     auto const to_pick_count = vertex_count - 2;

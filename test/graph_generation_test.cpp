@@ -3,8 +3,9 @@
 #include <variant>
 #include <vector>
 
-template <class T>
-void printGraph(Graph<T> const& graph)
+using namespace Graphs;
+
+void printGraph(Graph const& graph)
 {
     std::cout << "Graph (vertex count: " << graph.vertex_count() << "):\n";
     for (auto const& [v, edges] : graph) {
@@ -18,25 +19,25 @@ void printGraph(Graph<T> const& graph)
     std::cout << '\n';
 }
 
-template <class T>
+template <class GraphGenerator>
 void testGraph()
 {
-    printGraph(Graph<T>::generate(2));
-    printGraph(Graph<T>::generate(3));
-    printGraph(Graph<T>::generate(5));
-    printGraph(Graph<T>::generate(10));
+    printGraph(GraphGenerator::generate(2));
+    printGraph(GraphGenerator::generate(3));
+    printGraph(GraphGenerator::generate(5));
+    printGraph(GraphGenerator::generate(10));
 }
 
 int main(void)
 {
     std::cout << "Full graphs:\n";
-    testGraph<FullGraph>();
+    testGraph<FullGraphGenerator>();
 
     std::cout << "Partial graphs:\n";
-    testGraph<PartialGraph>();
+    testGraph<PartialGraphGenerator>();
 
     std::cout << "Tree graphs:\n";
-    testGraph<TreeGraph>();
+    testGraph<TreeGraphGenerator>();
 
     return 0;
 }
