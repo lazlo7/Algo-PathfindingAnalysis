@@ -5,6 +5,7 @@
 #include <exception>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
@@ -21,9 +22,11 @@ using VertexConstIterator = StdRepresentation::const_iterator;
 using VertexAdjacentIterator = StdRepresentation::mapped_type::iterator;
 using VertexAdjacentConstIterator = StdRepresentation::mapped_type::const_iterator;
 
+static Vertex constexpr kVertexError = -1;
 static DistType constexpr kMinRandomWeight = 1;
 static DistType constexpr kMaxRandomWeight = 10;
 static DistType constexpr kDistError = -1;
+static DistType constexpr kDistInf = std::numeric_limits<DistType>::max();
 };
 
 class Graph {
@@ -62,28 +65,8 @@ public:
         return _graph.end();
     }
 
-    Graphs::VertexAdjacentIterator adjacent_begin(Graphs::Vertex v)
-    {
-        auto it = _graph.find(v);
-        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.begin();
-    }
-
-    Graphs::VertexAdjacentIterator adjacent_end(Graphs::Vertex v)
-    {
-        auto it = _graph.find(v);
-        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.end();
-    }
-
-    Graphs::VertexAdjacentConstIterator adjacent_begin(Graphs::Vertex v) const
-    {
-        auto it = _graph.find(v);
-        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.begin();
-    }
-
-    Graphs::VertexAdjacentConstIterator adjacent_end(Graphs::Vertex v) const
-    {
-        auto it = _graph.find(v);
-        return it == _graph.end() ? Graphs::VertexAdjacentIterator(nullptr) : it->second.end();
+    auto const& adjacent(Graphs::Vertex u) const {
+        return _graph.at(u);
     }
 
 private:
