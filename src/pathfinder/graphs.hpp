@@ -24,9 +24,10 @@ static DistType constexpr kDistInf = std::numeric_limits<DistType>::max();
 
 class Graph {
 public:
-    Graph(Graphs::StdRepresentation const& graph);
+    Graph(Graphs::StdRepresentation const& graph, size_t edge_count);
 
     size_t vertex_count() const;
+    size_t edge_count() const;
     Graphs::VertexIterator begin();
     Graphs::VertexIterator end();
     Graphs::VertexConstIterator begin() const;
@@ -36,11 +37,16 @@ public:
 private:
     Graphs::StdRepresentation _graph;
     size_t _vertex_count {};
+    size_t _edge_count {};
 };
 
 class Full {
 public:
     static Graph generate(size_t vertex_count);
+    static constexpr inline char const* name()
+    {
+        return "Full";
+    }
 };
 
 class Partial {
@@ -50,6 +56,10 @@ public:
 
     static Graph generate(size_t vertex_count);
     static void addEdgeWithRandomWeight(Graphs::StdRepresentation& graph, Graphs::Vertex u, Graphs::Vertex v);
+    static constexpr inline char const* name()
+    {
+        return "Partial";
+    }
 
 private:
     static void addRandomEdges(Graphs::StdRepresentation& graph, size_t edge_count);
@@ -58,6 +68,10 @@ private:
 class Tree {
 public:
     static Graph generate(size_t vertex_count);
+    static constexpr inline char const* name()
+    {
+        return "Tree";
+    }
 
 private:
     static std::vector<Graphs::Vertex> generatePrefill(size_t vertex_count);

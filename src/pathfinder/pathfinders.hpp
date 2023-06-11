@@ -11,5 +11,9 @@ using Path = std::vector<Vertex>;
 class Dijkstra {
 public:
     static Path pathfind(Graph const& graph, Vertex from, Vertex to);
+    static constexpr inline char const* name()
+    {
+        return "Dijkstra";
+    }
 };
 };
