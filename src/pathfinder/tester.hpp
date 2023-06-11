@@ -10,7 +10,7 @@
 
 class Tester {
 public:
-    void runTests(std::ostream& output_stream, size_t test_repeat_count);
+    void runTests(std::ostream& output_stream, size_t test_repeat_count, size_t endpoints_generation_repeat_count);
 
 private:
     using TestResult = std::chrono::nanoseconds;

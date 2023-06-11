@@ -24,7 +24,8 @@ int main(int argc, char const** argv)
     }
 
     Tester tester {};
-    tester.runTests(output_stream, 100);
+    tester.runTests(output_stream, 20, 20);
 
+    output_stream.close();
     return 0;
 }
