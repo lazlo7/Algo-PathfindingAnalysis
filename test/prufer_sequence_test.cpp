@@ -1,4 +1,4 @@
-#include "../src/pathfinder/graph.hpp"
+#include "../src/pathfinder/graphs.hpp"
 #include <iostream>
 #include <vector>
 

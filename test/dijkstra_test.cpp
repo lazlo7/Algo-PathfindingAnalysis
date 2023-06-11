@@ -1,4 +1,4 @@
-#include "../src/pathfinder/pathfinder.hpp"
+#include "../src/pathfinder/pathfinders.hpp"
 #include <iostream>
 
 using namespace Graphs;
@@ -24,14 +24,13 @@ Vertex randomVertex(Graph const& graph)
 
 int main(void)
 {
-    auto const graph = TreeGraphGenerator::generate(100);
-    //printGraph(graph);
+    auto const graph = Graphs::Tree::generate(100);
 
     auto const from = randomVertex(graph);
     auto const to = randomVertex(graph);
     std::cout << "Path: from = " << from << " | to = " << to << '\n';
 
-    auto const path = DijkstraPathfinder::pathfind(graph, from, to);
+    auto const path = Pathfinders::Dijkstra::pathfind(graph, from, to);
     for (auto const v : path) {
         std::cout << v << ' ';
     }
