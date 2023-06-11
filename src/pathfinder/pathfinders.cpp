@@ -25,6 +25,10 @@ Path Dijkstra::pathfind(Graph const& graph, Vertex from, Vertex to)
         q.erase(u_it);
 
         for (auto const [adjacent, adjacent_dist] : graph.adjacent(u)) {
+            if (!std::ranges::contains(q, adjacent)) {
+                continue;
+            }
+
             auto const alt = dist[u] + adjacent_dist;
             if (alt < dist[adjacent]) {
                 dist[adjacent] = alt;
