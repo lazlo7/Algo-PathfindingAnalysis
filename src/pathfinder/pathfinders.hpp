@@ -26,4 +26,13 @@ public:
         return "Floyd-Warshall";
     }
 };
+
+class BellmanFord {
+public:
+    static Path pathfind(Graph const& graph, Vertex from, Vertex to);
+    static constexpr inline char const* name()
+    {
+        return "Bellman-Ford";
+    }
+};
 };

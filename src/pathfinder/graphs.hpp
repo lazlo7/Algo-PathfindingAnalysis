@@ -6,15 +6,16 @@
 
 namespace Graphs {
 using Vertex = int;
+using Edge = std::pair<Vertex, Vertex>;
 using DistType = int;
 
 using StdRepresentation = std::unordered_map<Vertex, std::unordered_map<Vertex, DistType>>;
+using Edges = std::vector<Edge>;
 
 using VertexIterator = StdRepresentation::iterator;
 using VertexConstIterator = StdRepresentation::const_iterator;
-
-using VertexAdjacentIterator = StdRepresentation::mapped_type::iterator;
-using VertexAdjacentConstIterator = StdRepresentation::mapped_type::const_iterator;
+using EdgeIterator = Edges::iterator;
+using EdgeConstIterator = Edges::const_iterator;
 
 static Vertex constexpr kVertexError = -1;
 static DistType constexpr kMinRandomWeight = 1;
@@ -28,16 +29,20 @@ public:
 
     size_t vertex_count() const;
     size_t edge_count() const;
-    Graphs::VertexIterator begin();
-    Graphs::VertexIterator end();
-    Graphs::VertexConstIterator begin() const;
-    Graphs::VertexConstIterator end() const;
+    VertexIterator begin();
+    VertexIterator end();
+    VertexConstIterator begin() const;
+    VertexConstIterator end() const;
+    EdgeIterator edges_begin();
+    EdgeIterator edges_end();
+    EdgeConstIterator edges_begin() const;
+    EdgeConstIterator edges_end() const;
+
     StdRepresentation::mapped_type const& adjacent(Graphs::Vertex u) const;
 
 private:
-    Graphs::StdRepresentation _graph;
-    size_t _vertex_count {};
-    size_t _edge_count {};
+    StdRepresentation _graph;
+    std::vector<Edge> _edges {};
 };
 
 class Full {

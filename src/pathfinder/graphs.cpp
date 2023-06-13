@@ -1,29 +1,34 @@
 #include "graphs.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <stdexcept>
 #include <unordered_set>
-#include <cassert>
 
 namespace Graphs {
 Graph::Graph(Graphs::StdRepresentation const& graph, size_t edge_count)
     : _graph(graph)
-    , _vertex_count(graph.size())
-    , _edge_count(edge_count)
 {
-    if (_vertex_count <= 1) {
+    if (vertex_count() <= 1) {
         throw std::invalid_argument("The number of vertices must be at least 2");
+    }
+
+    _edges.reserve(edge_count);
+    for (auto const& [u, edge] : graph) {
+        for (auto const [v, _] : edge) {
+            _edges.emplace_back(u, v);
+        }
     }
 }
 
 size_t Graph::vertex_count() const
 {
-    return _vertex_count;
+    return _graph.size();
 }
 
 size_t Graph::edge_count() const
 {
-    return _edge_count;
+    return _edges.size();
 }
 
 VertexIterator Graph::begin()
@@ -44,6 +49,26 @@ VertexConstIterator Graph::begin() const
 VertexConstIterator Graph::end() const
 {
     return _graph.end();
+}
+
+EdgeIterator Graph::edges_begin()
+{
+    return _edges.begin();
+}
+
+EdgeIterator Graph::edges_end()
+{
+    return _edges.end();
+}
+
+EdgeConstIterator Graph::edges_begin() const
+{
+    return _edges.begin();
+}
+
+EdgeConstIterator Graph::edges_end() const
+{
+    return _edges.end();
 }
 
 StdRepresentation::mapped_type const& Graph::adjacent(Graphs::Vertex u) const

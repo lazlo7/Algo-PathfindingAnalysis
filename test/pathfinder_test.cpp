@@ -26,8 +26,8 @@ Vertex randomVertex(Graph const& graph)
 
 int main(void)
 {
-    using PathfinderTs = std::variant<Pathfinders::Dijkstra, Pathfinders::FloydWarshall>;
-    std::vector<PathfinderTs> pathfinders = { Pathfinders::Dijkstra {}, Pathfinders::FloydWarshall {} };
+    using PathfinderTs = std::variant<Pathfinders::Dijkstra, Pathfinders::FloydWarshall, Pathfinders::BellmanFord>;
+    std::vector<PathfinderTs> pathfinders = { Pathfinders::Dijkstra {}, Pathfinders::FloydWarshall {}, Pathfinders::BellmanFord {} };
     static constexpr int test_count = 100;
 
     for (auto i = 0; i < test_count; ++i) {
@@ -43,7 +43,7 @@ int main(void)
             if (!firstDefined) {
                 controlPath = path;
                 firstName = name;
-                firstName = firstDefined = true;
+                firstDefined = true;
             } else {
                 if (path != controlPath) {
                     std::cout << "Discrepancy found!\n";

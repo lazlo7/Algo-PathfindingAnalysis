@@ -53,8 +53,8 @@ Path FloydWarshall::pathfind(Graph const& graph, Vertex from, Vertex to)
     std::vector<std::vector<DistType>> dist(graph.vertex_count(), std::vector<DistType>(graph.vertex_count(), kDistInf));
     std::vector<Path> next(graph.vertex_count(), Path(graph.vertex_count(), kVertexError));
 
-    for (auto const&[u, edge] : graph) {
-        for (auto const[v, weight] : edge) {
+    for (auto const& [u, edge] : graph) {
+        for (auto const [v, weight] : edge) {
             dist[u][v] = weight;
             next[u][v] = v;
         }
@@ -77,6 +77,38 @@ Path FloydWarshall::pathfind(Graph const& graph, Vertex from, Vertex to)
         path.push_back(from);
     }
 
+    return path;
+}
+
+Path BellmanFord::pathfind(const Graph& graph, Vertex from, Vertex to)
+{
+    std::vector<DistType> dist(graph.vertex_count(), kDistInf);
+    Path prev(graph.vertex_count(), kVertexError);
+    
+    dist[from] = 0;
+    for (auto i = 1uz; i < graph.vertex_count(); ++i) {
+        for (auto edge_it = graph.edges_begin(); edge_it != graph.edges_end(); ++edge_it) {
+            auto const[u, v] = *edge_it;
+            if (dist[u] == kDistInf) {
+                continue;
+            }
+
+            auto const weight = graph.adjacent(u).at(v);
+            auto const alt = dist[u] + weight;
+            if (dist[v] > alt) {
+                dist[v] = alt;
+                prev[v] = u;
+            }
+        }
+    }
+
+    Path path = { to };
+    while (from != to) {
+        to = prev[to];
+        path.push_back(to);
+    }
+
+    std::ranges::reverse(path);
     return path;
 }
 }
