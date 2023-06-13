@@ -15,12 +15,17 @@ public:
 private:
     using TestResult = std::chrono::nanoseconds;
     using GraphGeneratorTs = std::variant<Graphs::Full, Graphs::Partial, Graphs::Tree>;
-    using PathfinderTs = std::variant<Pathfinders::Dijkstra>;
+    using PathfinderTs = std::variant<Pathfinders::Dijkstra, Pathfinders::FloydWarshall, Pathfinders::BellmanFord, Pathfinders::SPFA>;
 
     static constexpr auto kMinVertexCount = 10uz;
     static constexpr auto kMaxVertexCount = 1010uz;
-    static constexpr auto kVertexCountStep = 50uz; 
+    static constexpr auto kVertexCountStep = 50uz;
 
     std::vector<GraphGeneratorTs> _graphGenerators = { Graphs::Full {}, Graphs::Partial {}, Graphs::Tree {} };
-    std::vector<PathfinderTs> _pathfinders = { Pathfinders::Dijkstra {} };
+    std::vector<PathfinderTs> _pathfinders = {
+        Pathfinders::Dijkstra {},
+        Pathfinders::FloydWarshall {},
+        Pathfinders::BellmanFord {},
+        Pathfinders::SPFA {}
+    };
 };

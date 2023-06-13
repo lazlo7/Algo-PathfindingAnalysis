@@ -2,7 +2,6 @@
 #include "graphs.hpp"
 
 #include <algorithm>
-#include <bits/ranges_algo.h>
 #include <deque>
 
 namespace Pathfinders {
@@ -14,10 +13,10 @@ Path Dijkstra::pathfind(Graph const& graph, Vertex from, Vertex to)
     std::deque<Vertex> q(graph.vertex_count());
     std::ranges::generate(q, [it { graph.begin() }] mutable { return (it++)->first; });
 
-    dist[from] = 0;
+    dist.at(from) = 0;
 
     while (!q.empty()) {
-        auto const u_it = std::ranges::min_element(q, [&dist](auto const lhs, auto const rhs) { return dist[lhs] < dist[rhs]; });
+        auto const u_it = std::ranges::min_element(q, [&dist](auto const lhs, auto const rhs) { return dist.at(lhs) < dist.at(rhs); });
         auto const u = *u_it;
 
         if (u == to) {
@@ -31,10 +30,10 @@ Path Dijkstra::pathfind(Graph const& graph, Vertex from, Vertex to)
                 continue;
             }
 
-            auto const alt = dist[u] + adjacent_dist;
-            if (alt < dist[adjacent]) {
-                dist[adjacent] = alt;
-                prev[adjacent] = u;
+            auto const alt = dist.at(u) + adjacent_dist;
+            if (alt < dist.at(adjacent)) {
+                dist.at(adjacent) = alt;
+                prev.at(adjacent) = u;
             }
         }
     }
@@ -42,7 +41,7 @@ Path Dijkstra::pathfind(Graph const& graph, Vertex from, Vertex to)
     Pathfinders::Path path;
     while (to != kVertexError) {
         path.push_back(to);
-        to = prev[to];
+        to = prev.at(to);
     }
 
     std::ranges::reverse(path);

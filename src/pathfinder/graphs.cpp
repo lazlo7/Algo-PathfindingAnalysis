@@ -6,14 +6,13 @@
 #include <unordered_set>
 
 namespace Graphs {
-Graph::Graph(Graphs::StdRepresentation const& graph, size_t edge_count)
+Graph::Graph(Graphs::StdRepresentation const& graph)
     : _graph(graph)
 {
     if (vertex_count() <= 1) {
         throw std::invalid_argument("The number of vertices must be at least 2");
     }
 
-    _edges.reserve(edge_count);
     for (auto const& [u, edge] : graph) {
         for (auto const [v, _] : edge) {
             _edges.emplace_back(u, v);
@@ -28,7 +27,7 @@ size_t Graph::vertex_count() const
 
 size_t Graph::edge_count() const
 {
-    return _edges.size();
+    return _edges.size() / 2;
 }
 
 VertexIterator Graph::begin()
@@ -92,8 +91,7 @@ Graph Full::generate(size_t vertex_count)
         }
     }
 
-    auto const edge_count = static_cast<size_t>(0.5 * vertex_count * (vertex_count - 1));
-    return { graph, edge_count };
+    return { graph };
 }
 
 Graph Partial::generate(size_t vertex_count)
@@ -137,7 +135,7 @@ Graph Partial::generate(size_t vertex_count)
         addRandomEdges(graph, remainder_edge_count);
     }
 
-    return { graph, edge_count };
+    return { graph };
 }
 
 void Partial::addEdgeWithRandomWeight(Graphs::StdRepresentation& graph, Graphs::Vertex u, Graphs::Vertex v)
@@ -203,7 +201,7 @@ Graph Tree::generate(size_t vertex_count)
         }
     }
 
-    return { graph, vertex_count - 1 };
+    return { graph };
 }
 
 std::vector<Graphs::Vertex> Tree::generatePruferSequence(size_t vertex_count)
@@ -217,5 +215,4 @@ std::vector<Graphs::Vertex> Tree::generatePruferSequence(size_t vertex_count)
 
     return result;
 }
-
 };

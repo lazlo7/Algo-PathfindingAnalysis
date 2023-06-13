@@ -25,7 +25,7 @@ static DistType constexpr kDistInf = std::numeric_limits<DistType>::max();
 
 class Graph {
 public:
-    Graph(Graphs::StdRepresentation const& graph, size_t edge_count);
+    Graph(Graphs::StdRepresentation const& graph);
 
     size_t vertex_count() const;
     size_t edge_count() const;
