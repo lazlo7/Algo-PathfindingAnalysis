@@ -41,8 +41,8 @@ T parseArg(int argc, char const** argv, const std::string& arg_prefix, T const& 
 
 int main(int argc, char const** argv)
 {
-    auto const test_repeat_count_default = 20uz;
-    auto const endpoints_generation_repeat_count_default = 60uz;
+    auto const test_repeat_count_default = 10uz;
+    auto const endpoints_generation_repeat_count_default = 10uz;
 
     if (argc < 2) {
         printUsage(argv[0], test_repeat_count_default, endpoints_generation_repeat_count_default);
