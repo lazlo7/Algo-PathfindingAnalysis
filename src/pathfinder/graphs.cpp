@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <unordered_set>
+#include <cassert>
 
 namespace Graphs {
 Graph::Graph(Graphs::StdRepresentation const& graph, size_t edge_count)
@@ -143,35 +144,44 @@ void Partial::addRandomEdges(Graphs::StdRepresentation& graph, size_t edge_count
 Graph Tree::generate(size_t vertex_count)
 {
     // Using Prüfer sequence to generate trees.
-    auto S = generatePrefill(vertex_count);
-    auto const n = S.size();
-    auto edge_count = 0uz;
+    auto prufer = generatePruferSequence(vertex_count);
+    std::vector<Vertex> vertices;
+    std::vector<size_t> freq(vertex_count);
 
-    std::unordered_set<Graphs::Vertex> L;
-    L.reserve(n + 2);
-    for (auto i = 1uz; i < n + 2 + 1; ++i) {
-        L.insert(i);
+    for (auto i = 0uz; i + 2 < vertex_count; ++i) {
+        ++freq[prufer[i] - 1];
     }
 
-    Graphs::StdRepresentation graph;
-    for (auto i = 0uz; i < n; ++i) {
-        auto const u = S.back();
-        std::vector<Graphs::Vertex> diff {};
-        std::ranges::set_difference(L, S, std::back_inserter(diff));
-        auto const v = *std::min(diff.begin(), diff.end());
-        S.pop_back();
-        L.erase(v);
+    StdRepresentation graph;
+    graph.reserve(vertex_count);
 
-        Partial::addEdgeWithRandomWeight(graph, u - 1, v - 1);
-        ++edge_count;
+    for (auto i = 0uz; i + 2 < vertex_count; ++i) {
+        for (auto j = 0uz; j < vertex_count; ++j) {
+            if (freq[j] == 0) {
+                --freq[j];
+                Partial::addEdgeWithRandomWeight(graph, j, prufer[i] - 1);
+                --freq[prufer[i] - 1];
+                break;
+            }
+        }
     }
 
-    Partial::addEdgeWithRandomWeight(graph, *L.begin() - 1, *std::next(L.begin()) - 1);
-    ++edge_count;
-    return { graph, edge_count };
+    auto j = 0uz;
+    Vertex first = kVertexError;
+    for (auto i = 0uz; i < vertex_count; i++) {
+        if (freq[i] == 0 && j == 0) {
+            first = i;
+            ++j;
+        } else if (freq[i] == 0 && j == 1) {
+            assert(first != kVertexError && "'first' must have already been initialized");
+            Partial::addEdgeWithRandomWeight(graph, first, i);
+        }
+    }
+
+    return { graph, vertex_count - 1 };
 }
 
-std::vector<Graphs::Vertex> Tree::generatePrefill(size_t vertex_count)
+std::vector<Graphs::Vertex> Tree::generatePruferSequence(size_t vertex_count)
 {
     auto const to_pick_count = vertex_count - 2;
     std::vector<Graphs::Vertex> result(to_pick_count);

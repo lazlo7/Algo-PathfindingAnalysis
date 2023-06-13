@@ -74,7 +74,7 @@ public:
     }
 
 private:
-    static std::vector<Graphs::Vertex> generatePrefill(size_t vertex_count);
+    static std::vector<Graphs::Vertex> generatePruferSequence(size_t vertex_count);
 };
 };
 
