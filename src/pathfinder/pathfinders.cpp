@@ -2,6 +2,7 @@
 #include "graphs.hpp"
 
 #include <algorithm>
+#include <bits/ranges_algo.h>
 #include <deque>
 
 namespace Pathfinders {
@@ -84,11 +85,11 @@ Path BellmanFord::pathfind(const Graph& graph, Vertex from, Vertex to)
 {
     std::vector<DistType> dist(graph.vertex_count(), kDistInf);
     Path prev(graph.vertex_count(), kVertexError);
-    
+
     dist[from] = 0;
     for (auto i = 1uz; i < graph.vertex_count(); ++i) {
         for (auto edge_it = graph.edges_begin(); edge_it != graph.edges_end(); ++edge_it) {
-            auto const[u, v] = *edge_it;
+            auto const [u, v] = *edge_it;
             if (dist[u] == kDistInf) {
                 continue;
             }
@@ -98,6 +99,44 @@ Path BellmanFord::pathfind(const Graph& graph, Vertex from, Vertex to)
             if (dist[v] > alt) {
                 dist[v] = alt;
                 prev[v] = u;
+            }
+        }
+    }
+
+    Path path = { to };
+    while (from != to) {
+        to = prev[to];
+        path.push_back(to);
+    }
+
+    std::ranges::reverse(path);
+    return path;
+}
+
+Path SPFA::pathfind(const Graph& graph, Vertex from, Vertex to)
+{
+    std::vector<DistType> dist(graph.vertex_count(), kDistInf);
+    Path prev(graph.vertex_count(), kVertexError);
+
+    dist[from] = 0;
+    std::deque<Vertex> queue = { from };
+
+    while (!queue.empty()) {
+        auto const u = queue.front();
+        queue.pop_front();
+
+        if (dist[u] == kDistInf) {
+            continue;
+        }
+
+        for (auto const [v, weight] : graph.adjacent(u)) {
+            auto const alt = dist[u] + weight;
+            if (dist[v] > alt) {
+                dist[v] = alt;
+                prev[v] = u;
+                if (!std::ranges::contains(queue, v)) {
+                    queue.push_back(v);
+                }
             }
         }
     }

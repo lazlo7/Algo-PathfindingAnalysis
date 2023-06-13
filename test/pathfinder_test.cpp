@@ -26,8 +26,14 @@ Vertex randomVertex(Graph const& graph)
 
 int main(void)
 {
-    using PathfinderTs = std::variant<Pathfinders::Dijkstra, Pathfinders::FloydWarshall, Pathfinders::BellmanFord>;
-    std::vector<PathfinderTs> pathfinders = { Pathfinders::Dijkstra {}, Pathfinders::FloydWarshall {}, Pathfinders::BellmanFord {} };
+    using PathfinderTs = std::variant<Pathfinders::Dijkstra, Pathfinders::FloydWarshall, Pathfinders::BellmanFord, Pathfinders::SPFA>;
+    std::vector<PathfinderTs> pathfinders = {
+        Pathfinders::Dijkstra {},
+        Pathfinders::FloydWarshall {},
+        Pathfinders::BellmanFord {},
+        Pathfinders::SPFA {}
+    };
+
     static constexpr int test_count = 100;
 
     for (auto i = 0; i < test_count; ++i) {
