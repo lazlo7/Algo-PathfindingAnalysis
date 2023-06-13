@@ -9,11 +9,11 @@ graph-generation: graph_generation_test.cpp
 prufer-sequence: prufer_sequence_test.cpp
 	$(CC) $(CFLAGS) $(GRAPH_SRC) prufer_sequence_test.cpp -o prufer-sequence-test
 
-dijkstra: dijkstra_test.cpp
-	$(CC) $(CFLAGS) $(PATHFINDER_SRC) dijkstra_test.cpp -o dijkstra-test
+pathfinder: pathfinder_test.cpp
+	$(CC) $(CFLAGS) $(PATHFINDER_SRC) pathfinder_test.cpp -o pathfinder-test
 
-all: graph-generation prufer-sequence dijkstra
+all: graph-generation prufer-sequence pathfinder
 .DEFAULT_GOAL := all
 
 clean:
-	rm -f graph-generation-test prufer-sequence-test dijkstra-test
+	rm -f graph-generation-test prufer-sequence-test pathfinder-test

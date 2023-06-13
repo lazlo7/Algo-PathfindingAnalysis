@@ -16,4 +16,14 @@ public:
         return "Dijkstra";
     }
 };
+
+// Standard Floyd-Warshall implementation
+class FloydWarshall {
+public:
+    static Path pathfind(Graph const& graph, Vertex from, Vertex to);
+    static constexpr inline char const* name()
+    {
+        return "Floyd-Warshall";
+    }
+};
 };
