@@ -25,6 +25,7 @@
 Обзор файлов:
 - `./src/pathfinder/`: исходники `pathfinder` на `C++ 23`;
 - `./src/plotter.ipynb`: исходники `plotter` на `Python 3.10`;
+- `./pics/`: картинки графиков
 - `./build/out.csv`: результаты замеров `pathfinder`;
 - `.clangd`: конфигурационный файл для языкового сервера `clangd`;
 - `build.sh`: скрипт сборки `pathfinder`;
