@@ -61,7 +61,6 @@ void Tester::runTests(std::ostream& output_stream, size_t test_repeat_count, siz
 
                 output_stream << graph_name << ','
                               << vertex_count << ','
-                              << graph.vertex_count() << ','
                               << graph.edge_count() << ','
                               << pathfinder_name << ','
                               << result.count()
